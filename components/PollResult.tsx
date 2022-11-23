@@ -3,6 +3,7 @@ import Button from "react-bootstrap/Button";
 
 export default function PollResult() {
   const [pollOptions, setPollOptions] = useState([]);
+  const [startingGame, setStartingGame] = useState(false);
 
   const mostVotedOption = useMemo(() => {
     if (pollOptions.length === 0) {
@@ -34,6 +35,7 @@ export default function PollResult() {
   }, []);
 
   const createGame = async () => {
+    setStartingGame(true);
     fetch(`${process.env.NEXT_PUBLIC_API_URL}/game`, {
       method: "POST",
       headers: {
@@ -41,7 +43,9 @@ export default function PollResult() {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ option: mostVotedOption.option }),
-    }).then((result) => result.json());
+    })
+      .then((result) => result.json())
+      .finally(() => setStartingGame(false));
   };
 
   return (
@@ -58,7 +62,7 @@ export default function PollResult() {
         onClick={createGame}
         disabled={!mostVotedOption}
       >
-        Create Game
+        {startingGame ? "Starting game..." : "Create Game"}
       </Button>
     </>
   );
