@@ -5,7 +5,6 @@ export const getPollResults = async () => {
   const pollOptions = await prisma.pollOption.findMany();
   return results.reduce(
     (acc, result) => {
-      console.log(acc, result);
       return acc.map((pollResult) => {
         if (pollResult.id === result.pollOptionId) {
           return { ...pollResult, count: pollResult.count + 1 };

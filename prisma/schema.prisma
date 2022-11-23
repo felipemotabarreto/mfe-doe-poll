@@ -13,7 +13,6 @@ model Team {
   id    Int    @id @default(autoincrement())
   name  String
   users User[]
-  games Game[]
 }
 
 model User {
@@ -49,6 +48,4 @@ model Game {
   active     Boolean
   gameMode   GameMode? @relation(fields: [gameModeId], references: [id])
   gameModeId Int?
-  teamTurn   Team?     @relation(fields: [teamTurnId], references: [id])
-  teamTurnId Int?
 }
