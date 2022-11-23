@@ -1,3 +1,5 @@
+import { prisma } from "./db";
+
 export const createGame = async (option) => {
   const gameMode = await prisma.gameMode.findFirst({ where: { name: option } });
   return prisma.game.create({
