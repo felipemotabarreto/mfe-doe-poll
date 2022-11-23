@@ -1,0 +1,54 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["referentialIntegrity"]
+}
+
+datasource db {
+  provider             = "mysql"
+  url                  = env("DATABASE_URL")
+  referentialIntegrity = "prisma"
+}
+
+model Team {
+  id    Int    @id @default(autoincrement())
+  name  String
+  users User[]
+  games Game[]
+}
+
+model User {
+  id     Int    @id @default(autoincrement())
+  name   String
+  polls  Poll[]
+  team   Team?  @relation(fields: [teamId], references: [id])
+  teamId Int?
+}
+
+model PollOption {
+  id     Int    @id @default(autoincrement())
+  option String
+  polls  Poll[]
+}
+
+model Poll {
+  id           Int        @id @default(autoincrement())
+  userId       Int        @unique
+  user         User       @relation(fields: [userId], references: [id])
+  pollOptionId Int
+  option       PollOption @relation(fields: [pollOptionId], references: [id])
+}
+
+model GameMode {
+  id    Int    @id @default(autoincrement())
+  name  String
+  games Game[]
+}
+
+model Game {
+  id         Int       @id @default(autoincrement())
+  active     Boolean
+  gameMode   GameMode? @relation(fields: [gameModeId], references: [id])
+  gameModeId Int?
+  teamTurn   Team?     @relation(fields: [teamTurnId], references: [id])
+  teamTurnId Int?
+}

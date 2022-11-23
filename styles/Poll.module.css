@@ -1,0 +1,32 @@
+.pollContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.poll {
+  padding: 20px;
+  border: 1px solid gray;
+  cursor: pointer;
+  text-align: center;
+}
+
+.pollSelected {
+  padding: 20px;
+  border: 1px solid lightseagreen;
+  background-color: lightseagreen;
+  color: white;
+  cursor: pointer;
+  text-align: center;
+}
+
+@media screen and (min-width: 720px) {
+  .pollContainer {
+    flex-direction: row;
+  }
+
+  .poll, .pollSelected {
+    min-width: 250px;
+  }
+}
