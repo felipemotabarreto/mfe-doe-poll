@@ -10,17 +10,19 @@ datasource db {
 }
 
 model Team {
-  id    Int    @id @default(autoincrement())
-  name  String
-  users User[]
+  id               Int                @id @default(autoincrement())
+  name             String
+  users            User[]
+  gameChallengeTip GameChallengeTip[]
 }
 
 model User {
-  id     Int    @id @default(autoincrement())
-  name   String
-  polls  Poll[]
-  team   Team?  @relation(fields: [teamId], references: [id])
-  teamId Int?
+  id         Int          @id @default(autoincrement())
+  name       String
+  polls      Poll[]
+  team       Team?        @relation(fields: [teamId], references: [id])
+  teamId     Int?
+  GamePoints GamePoints[]
 }
 
 model PollOption {
@@ -38,14 +40,44 @@ model Poll {
 }
 
 model GameMode {
-  id    Int    @id @default(autoincrement())
-  name  String
-  games Game[]
+  id            Int             @id @default(autoincrement())
+  name          String
+  games         Game[]
+  gameChallenge GameChallenge[]
+}
+
+model GameChallengeTip {
+  id              Int           @id @default(autoincrement())
+  gameChallenge   GameChallenge @relation(fields: [gameChallengeId], references: [id])
+  gameChallengeId Int
+  team            Team          @relation(fields: [teamId], references: [id])
+  teamId          Int
+  tip             String
+}
+
+model GameChallenge {
+  id               Int                @id @default(autoincrement())
+  gameMode         GameMode           @relation(fields: [gameModeId], references: [id])
+  gameModeId       Int
+  answer           String
+  game             Game[]
+  gameChallengeTip GameChallengeTip[]
+  GamePoints       GamePoints[]
+}
+
+model GamePoints {
+  id          Int           @id @default(autoincrement())
+  user        User          @relation(fields: [userId], references: [id])
+  userId      Int
+  challenge   GameChallenge @relation(fields: [challengeId], references: [id])
+  challengeId Int
 }
 
 model Game {
-  id         Int       @id @default(autoincrement())
-  active     Boolean
-  gameMode   GameMode? @relation(fields: [gameModeId], references: [id])
-  gameModeId Int?
+  id                 Int            @id @default(autoincrement())
+  active             Boolean
+  gameMode           GameMode?      @relation(fields: [gameModeId], references: [id])
+  gameModeId         Int?
+  currentChallenge   GameChallenge? @relation(fields: [currentChallengeId], references: [id])
+  currentChallengeId Int?
 }
